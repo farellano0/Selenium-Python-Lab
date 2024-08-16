@@ -1,3 +1,7 @@
+import os, sys
+parent = os.path.abspath('.')
+sys.path.insert(1, parent)
+
 import unittest
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
@@ -27,95 +31,161 @@ class Funciones_Globales():
         self.driver.maximize_window()
         print(f"Página abierta {url}")
     
-    def Validar_Texto(self, path, texto, tiempo):
-        try:
-            val = WebDriverWait(self.driver, 10).until(EC.visibility_of_element_located((By.XPATH, path)))
-            val.clear()
-            val.send_keys(texto)
-            t = time.sleep(tiempo)
-            return t
-        except TimeoutException as ex:
-            print(ex.msg)
-            print(f"No se encontró el elemento {path}")
+    def Validar_Texto(self, selector, path, texto, tiempo):
+        if(selector=="xpath"):
+            try:
+                val = WebDriverWait(self.driver, 10).until(EC.visibility_of_element_located((By.XPATH, path)))
+                self.driver.execute_script("arguments[0].scrollIntoView(true);", val)
+                val.clear()
+                val.send_keys(texto)
+                t = time.sleep(tiempo)
+                return t
+            except TimeoutException as ex:
+                print(ex.msg)
+                print(f"No se encontró el elemento {path}")
+        elif(selector=="id"):
+            try:
+                val = WebDriverWait(self.driver, 10).until(EC.visibility_of_element_located((By.ID, path)))
+                self.driver.execute_script("arguments[0].scrollIntoView(true);", val)
+                val.clear()
+                val.send_keys(texto)
+                t = time.sleep(tiempo)
+                return t
+            except TimeoutException as ex:
+                print(ex.msg)
+                print(f"No se encontró el elemento {path}")
     
-    def Texto_ID_Valida(self, path, texto, tiempo):
-        try:
-            val = WebDriverWait(self.driver, 10).until(EC.visibility_of_element_located((By.ID, path)))
-            val.clear()
-            val.send_keys(texto)
-            t = time.sleep(tiempo)
-            return t
-        except TimeoutException as ex:
-            print(ex.msg)
-            print(f"No se encontró el elemento {path}")
             
-    def Click_Xpath_Valida(self, path, tiempo):
-        try:
-            btn = WebDriverWait(self.driver, 10).until(EC.visibility_of_element_located((By.XPATH, path)))
-            btn.click()
-            t = time.sleep(tiempo)
-            return t
-        except TimeoutException as ex:
-            print(ex.msg)
-            print(f"No se encontró el elemento {path}")
+    def Click_Valida(self, selector, path, tiempo):
+        if(selector=="xpath"):
+            try:
+                btn = WebDriverWait(self.driver, 10).until(EC.visibility_of_element_located((By.XPATH, path)))
+                self.driver.execute_script("arguments[0].scrollIntoView(true);", btn)
+                btn.click()
+                t = time.sleep(tiempo)
+                return t
+            except TimeoutException as ex:
+                print(ex.msg)
+                print(f"No se encontró el elemento {path}")
+        elif(selector=="id"):
+            try:
+                btn = WebDriverWait(self.driver, 10).until(EC.visibility_of_element_located((By.ID, path)))
+                self.driver.execute_script("arguments[0].scrollIntoView(true);", btn)
+                btn.click()
+                t = time.sleep(tiempo)
+                return t
+            except TimeoutException as ex:
+                print(ex.msg)
+                print(f"No se encontró el elemento {path}")
             
-    def Click_Id_Valida(self, path, tiempo):
-        try:
-            btn = WebDriverWait(self.driver, 10).until(EC.visibility_of_element_located((By.ID, path)))
-            btn.click()
-            t = time.sleep(tiempo)
-            return t
-        except TimeoutException as ex:
-            print(ex.msg)
-            print(f"No se encontró el elemento {path}")
             
-    def Select_Xpath_Type(self, path, tipo, dato, tiempo):
-        try:
-            val = WebDriverWait(self.driver, 5).until(EC.visibility_of_element_located((By.XPATH, path)))
-            self.driver.execute_script("arguments[0].scrollIntoView(true);", val)
-            val = Select(val)
-            if (tipo=="text"):
-                val.select_by_visible_text(dato)
-            elif (tipo=="index"):
-                val.select_by_index(dato)
-            elif (tipo=="value"):
-                val.select_by_value(dato)
-            t = time.sleep(tiempo)
-            return t
-        except TimeoutException as ex:
-            print(ex.msg)
-            print(f"No se encontró el elemento {path}")
+    def Select_Type(self, selector, path, tipo, dato, tiempo):
+        if(selector=="xpath"):
+            try:
+                val = WebDriverWait(self.driver, 5).until(EC.visibility_of_element_located((By.XPATH, path)))
+                self.driver.execute_script("arguments[0].scrollIntoView(true);", val)
+                val = Select(val)
+                if (tipo=="text"):
+                    val.select_by_visible_text(dato)
+                elif (tipo=="index"):
+                    val.select_by_index(dato)
+                elif (tipo=="value"):
+                    val.select_by_value(dato)
+                t = time.sleep(tiempo)
+                return t
+            except TimeoutException as ex:
+                print(ex.msg)
+                print(f"No se encontró el elemento {path}")
+        elif(selector=="id"):
+            try:
+                val = WebDriverWait(self.driver, 5).until(EC.visibility_of_element_located((By.ID, path)))
+                self.driver.execute_script("arguments[0].scrollIntoView(true);", val)
+                val = Select(val)
+                if (tipo=="text"):
+                    val.select_by_visible_text(dato)
+                elif (tipo=="index"):
+                    val.select_by_index(dato)
+                elif (tipo=="value"):
+                    val.select_by_value(dato)
+                t = time.sleep(tiempo)
+                return t
+            except TimeoutException as ex:
+                print(ex.msg)
+                print(f"No se encontró el elemento {path}")
             
-    def Select_ID_Type(self, path, tipo, dato, tiempo):
-        try:
-            val = WebDriverWait(self.driver, 5).until(EC.visibility_of_element_located((By.ID, path)))
-            self.driver.execute_script("arguments[0].scrollIntoView(true);", val)
-            val = Select(val)
-            if (tipo=="text"):
-                val.select_by_visible_text(dato)
-            elif (tipo=="index"):
-                val.select_by_index(dato)
-            elif (tipo=="value"):
-                val.select_by_value(dato)
-            t = time.sleep(tiempo)
-            return t
-        except TimeoutException as ex:
-            print(ex.msg)
-            print(f"No se encontró el elemento {path}")
+    def Upload(self, selector, path, ruta, tiempo):
+        if(selector=="xpath"):
+            try:
+                val = WebDriverWait(self.driver, 5).until(EC.visibility_of_element_located((By.XPATH, path)))
+                self.driver.execute_script("arguments[0].scrollIntoView(true);", val)
+                val.send_keys(ruta)
+                print(f"Se carga la imagen {ruta}.")
+                
+                t = time.sleep(tiempo)
+                return t
             
-    def Upload_Xpath(self, path, ruta, tiempo):
-        try:
-            val = WebDriverWait(self.driver, 5).until(EC.visibility_of_element_located((By.ID, path)))
-            self.driver.execute_script("arguments[0].scrollIntoView(true);", val)
-            val.send_keys(ruta)
-            print(f"Se carga la imagen {ruta}.")
+            except TimeoutException as ex:
+                print(ex.msg)
+                print(f"No se encontró el elemento {path}")
+        elif(selector=="id"):
+            try:
+                val = WebDriverWait(self.driver, 5).until(EC.visibility_of_element_located((By.ID, path)))
+                self.driver.execute_script("arguments[0].scrollIntoView(true);", val)
+                val.send_keys(ruta)
+                print(f"Se carga la imagen {ruta}.")
+                
+                t = time.sleep(tiempo)
+                return t
             
-            t = time.sleep(tiempo)
-            return t
-        
+            except TimeoutException as ex:
+                print(ex.msg)
+                print(f"No se encontró el elemento {path}")
+            
+    # Función Radio y Check
+    def Check(self, selector, path, tiempo):
+        if(selector=="xpath"):
+            try:
+                val = WebDriverWait(self.driver, 5).until(EC.visibility_of_element_located((By.XPATH, path)))
+                self.driver.execute_script("arguments[0].scrollIntoView(true);", val)
+                val.click()
+                print(f"click en el elemento {path}.")
+                
+                t = time.sleep(tiempo)
+                return t
+            
+            except TimeoutException as ex:
+                print(ex.msg)
+                print(f"No se encontró el elemento {path}")
+        elif(selector=="id"):
+            try:
+                val = WebDriverWait(self.driver, 5).until(EC.visibility_of_element_located((By.ID, path)))
+                self.driver.execute_script("arguments[0].scrollIntoView(true);", val)
+                val.click()
+                print(f"click en el elemento {path}.")
+                
+                t = time.sleep(tiempo)
+                return t
+            
+            except TimeoutException as ex:
+                print(ex.msg)
+                print(f"No se encontró el elemento {path}")
+            
+            
+    def Check_Xpath_Multiples(self, path, tiempo, *args):
+        try:
+            for n in args:
+                val = WebDriverWait(self.driver, 5).until(EC.visibility_of_element_located((By.XPATH, n)))
+                self.driver.execute_script("arguments[0].scrollIntoView(true);", val)
+                val.click()
+                print(f"click en el elemento {path}.")
+                
+                t = time.sleep(tiempo)
+                return t
+            
         except TimeoutException as ex:
-            print(ex.msg)
-            print(f"No se encontró el elemento {path}")
+            for n in args:
+                print(ex.msg)
+                print(f"No se encontró el elemento {n}")
             
     def Salida(self):
         print("Se termina la prueba Exitosamente")
