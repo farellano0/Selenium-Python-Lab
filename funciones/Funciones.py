@@ -186,6 +186,30 @@ class Funciones_Globales():
             for n in args:
                 print(ex.msg)
                 print(f"No se encontró el elemento {n}")
+                
+    def Existe(self, selector, path, tiempo):
+        if (selector == "xpath"):
+            try:
+                val = WebDriverWait(self.driver, 5).until(EC.visibility_of_element_located((By.XPATH, path)))
+                self.driver.execute_script("arguments[0].scrollIntoView();", val)
+                print(f"El elemento {path} -> existe ")
+                t = time.sleep(tiempo)
+                return "Existe"
+            except TimeoutException as ex:
+                print(ex.msg)
+                print("No se encontro el Elemento" + path)
+                return "No Existe"
+        elif (selector == "id"):
+            try:
+                val = WebDriverWait(self.driver, 5).until(EC.visibility_of_element_located((By.ID, path)))
+                self.driver.execute_script("arguments[0].scrollIntoView();", val)
+                if val.is_displayed():
+                    print(f"El elemento {path} -> existe")
+                    return "Existe"
+            except TimeoutException as ex:
+                print(ex.msg)
+                print("No se encontro el Elemento" + path)
+                return "No Existe"
             
     def Salida(self):
         print("Se termina la prueba Exitosamente")
