@@ -1,6 +1,6 @@
 import os
 import sys
-from typing import Literal
+from typing import Literal, Optional
 from selenium import webdriver
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.chrome.options import Options
@@ -13,15 +13,16 @@ from selenium.webdriver.common.action_chains import ActionChains
 import time
 
 class FuncionesGlobales:
-    def __init__(self, driver_path: str = "C:\\Drivers\\chromedriver.exe"):
+    def __init__(self, driver: Optional[webdriver.Chrome] = None, driver_path: str = "C:\\Drivers\\chromedriver.exe"):
         self.service = Service(driver_path)
-        self.driver = None
+        self.driver = driver if driver is not None else None
         
     def init(self):
-        chrome_options = Options()
-        chrome_options.add_argument('--ignore-certificate-errors')
-        chrome_options.add_argument('--ignore-ssl-errors')
-        self.driver = webdriver.Chrome(service=self.service, options=chrome_options)
+        if self.driver is None:
+            chrome_options = Options()
+            chrome_options.add_argument('--ignore-certificate-errors')
+            chrome_options.add_argument('--ignore-ssl-errors')
+            self.driver = webdriver.Chrome(service=self.service, options=chrome_options)
         self.driver.implicitly_wait(15)
         
     @staticmethod

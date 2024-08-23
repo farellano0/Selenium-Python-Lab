@@ -1,39 +1,32 @@
-import os, sys
+import os
+import sys
 parent = os.path.abspath('.')
 sys.path.insert(1, parent)
 
 import unittest
-from selenium import webdriver
-from selenium.webdriver.chrome.service import Service
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.common.exceptions import TimeoutException
-from funciones.Funciones import Funciones_Globales
-from funciones.login_Page import Login_Page
-import time
+from funciones.Funciones import FuncionesGlobales
 
-t=3
+t = 3
 
-class base_test(unittest.TestCase):
+class BaseTest(unittest.TestCase):
 
     def setUp(self):
-        d = Funciones_Globales
-        d.Init(self)
+        print("\n--- Iniciando prueba ---")
+        self.funciones = FuncionesGlobales()
+        self.funciones.init()
+        self.driver = self.funciones.driver
 
     def test1(self):
-        driver = self.driver
-        d = Funciones_Globales(driver)
-        d.Navegar("https://demoqa.com/checkbox")
-        d.Check_Xpath("//button[contains(@aria-label,'Toggle')]", t)
-        d.Check_Xpath("//label[@for='tree-node-documents'][contains(.,'Documents')]",t)
-        d.Check_Xpath("//label[@for='tree-node-downloads'][contains(.,'Downloads')]",t)
-        
-        
+        print("\nEjecutando test: Checkbox en Demo QA")
+        self.funciones.navegar("https://demoqa.com/checkbox")
+        self.funciones.check("xpath", "//button[contains(@aria-label,'Toggle')]", t)
+        self.funciones.check("xpath", "//label[@for='tree-node-documents'][contains(.,'Documents')]", t)
+        self.funciones.check("xpath", "//label[@for='tree-node-downloads'][contains(.,'Downloads')]", t)
+        print("Test1 completado")
 
     def tearDown(self):
-        driver = self.driver
-        driver.quit()
-        
+        print("\n--- Finalizando prueba ---")
+        self.funciones.salida()
+
 if __name__ == "__main__":
-    unittest.main()
+    unittest.main(verbosity=2)

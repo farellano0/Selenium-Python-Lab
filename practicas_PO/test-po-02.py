@@ -3,35 +3,28 @@ parent = os.path.abspath('.')
 sys.path.insert(1, parent)
 
 import unittest
-from selenium import webdriver
-from selenium.webdriver.chrome.service import Service
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.common.exceptions import TimeoutException
-from funciones.Funciones import Funciones_Globales
+from funciones.Funciones import FuncionesGlobales
 from funciones.login_Page import Login_Page
-import time
 
-t=3
+t= 1
 
 class base_test(unittest.TestCase):
 
     def setUp(self):
-        d = Funciones_Globales
-        d.Init(self)
+        print("\n--- Iniciando prueba ---")
+        self.funciones = FuncionesGlobales()
+        self.funciones.init()
+        self.driver = self.funciones.driver
+        self.funcionesLP = Login_Page(self.driver)
 
     def test1(self):
-        driver = self.driver
-        d = Funciones_Globales(driver)
-        lp = Login_Page(driver)
-        lp.Login_Master("standard_user", "secret_sauce")
-        d.Salida()
+        print("\nEjecutando test")
+        self.funcionesLP.Login_Master("standard_user", "secret_sauce")
         
 
     def tearDown(self):
-        driver = self.driver
-        driver.quit()
+        print("\n--- Finalizando prueba ---")
+        self.funciones.salida()
         
 if __name__ == "__main__":
     unittest.main()

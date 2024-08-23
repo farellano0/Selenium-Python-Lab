@@ -3,28 +3,21 @@ parent = os.path.abspath('.')
 sys.path.insert(1, parent)
 
 import unittest
-from selenium import webdriver
-from selenium.webdriver.chrome.service import Service
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.common.exceptions import TimeoutException
-from funciones.Funciones import Funciones_Globales
-from funciones.login_Page import Login_Page
-import time
+from funciones.Funciones import FuncionesGlobales
 
-t=3
+t= 1
 
 class base_test(unittest.TestCase):
 
     def setUp(self):
-        d = Funciones_Globales
-        d.Init(self)
+        print("\n--- Iniciando prueba ---")
+        self.funciones = FuncionesGlobales()
+        self.funciones.init()
+        self.driver = self.funciones.driver
 
     def test1(self):
-        driver = self.driver
-        d = Funciones_Globales(driver)
-        d.Navegar("https://testpages.herokuapp.com/styled/file-upload-test.html")
+        print("\nEjecutando test: Inicio de sesion en Sauce Demo")
+        self.funciones.navegar("https://testpages.herokuapp.com/styled/file-upload-test.html")
         
         # Obtener la ruta del directorio del script actual
         current_dir = os.path.dirname(os.path.abspath(__file__))
@@ -39,12 +32,13 @@ class base_test(unittest.TestCase):
         if not os.path.exists(absolute_image_path):
             raise FileNotFoundError(f"La imagen no se encuentra en la ruta: {absolute_image_path}")
         
-        d.Upload_ID("fileinput", absolute_image_path, t)
+        self.funciones.upload("id", "fileinput", absolute_image_path, t)
         
+        print("Test1 completado")
 
     def tearDown(self):
-        driver = self.driver
-        driver.quit()
+        print("\n--- Finalizando prueba ---")
+        self.funciones.salida()
         
 if __name__ == "__main__":
     unittest.main()

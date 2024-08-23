@@ -12,17 +12,16 @@ from selenium.common.exceptions import TimeoutException
 from funciones.Funciones import FuncionesGlobales
 import time
 
-t=2
+t=1
 
 class Login_Page():
     
     def __init__(self, driver):
-        self.driver = driver
+        self.funciones = FuncionesGlobales(driver)
         
     def Login_Master(self, username, password):
-        driver = self.driver
-        d = FuncionesGlobales(driver)
-        d.Navegar("https://www.saucedemo.com/")
-        d.Validar_Texto("//input[contains(@id,'user-name')]", username, t)
-        d.Validar_Texto("//input[@id='password']", password, t)
-        d.Click_Xpath_Valida("//input[@id='login-button']", t)
+        
+        self.funciones.navegar("https://www.saucedemo.com/")
+        self.funciones.validar_texto("id", "user-name", username, t)
+        self.funciones.validar_texto("id",'password', password, t)
+        self.funciones.click_valida("id", 'login-button', t)

@@ -3,36 +3,29 @@ parent = os.path.abspath('.')
 sys.path.insert(1, parent)
 
 import unittest
-from selenium import webdriver
-from selenium.webdriver.chrome.service import Service
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.common.exceptions import TimeoutException
-from funciones.Funciones import Funciones_Globales
-from funciones.login_Page import Login_Page
-import time
+from funciones.Funciones import FuncionesGlobales
 
-t=3
+t= 1
 
-class base_test(unittest.TestCase):
+class BaseTest(unittest.TestCase):
 
     def setUp(self):
-        d = Funciones_Globales
-        d.Init(self)
+        print("\n--- Iniciando prueba ---")
+        self.funciones = FuncionesGlobales()
+        self.funciones.init()
+        self.driver = self.funciones.driver
 
     def test1(self):
-        driver = self.driver
-        d = Funciones_Globales(driver)
-        d.Navegar("https://demo.seleniumeasy.com/basic-select-dropdown-demo.html")
-        d.Select_Xpath_Type("//select[@id='select-demo']", "value", "Sunday", t)
-        d.Select_Xpath_Type("//select[@id='select-demo']", "text", "Wednesday", t)
-        d.Select_Xpath_Type("//select[@id='select-demo']", "index", "6", t)
-        
+        print("\nEjecutando test")
+        self.funciones.navegar("https://demo.seleniumeasy.com/basic-select-dropdown-demo.html")
+        self.funciones.select_type("xpath", "//select[@id='select-demo']", "value", "Sunday", t)
+        self.funciones.select_type("xpath","//select[@id='select-demo']", "text", "Wednesday", t)
+        self.funciones.select_type("xpath","//select[@id='select-demo']", "index", "6", t)
+        print("Test completado")
 
     def tearDown(self):
-        driver = self.driver
-        driver.quit()
+        print("\n--- Finalizando prueba ---")
+        self.funciones.salida()
         
 if __name__ == "__main__":
-    unittest.main()
+    unittest.main(verbosity=2)
