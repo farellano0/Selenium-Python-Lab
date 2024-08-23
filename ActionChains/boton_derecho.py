@@ -17,12 +17,12 @@ class BaseTest(unittest.TestCase):
         self.driver = self.funciones.driver
 
     def test1(self):
-        print("\nEjecutando test: Doble clic en Demo QA")
+        print("\nEjecutando test: Clic derecho en Demo QA")
         self.funciones.navegar("https://demoqa.com/buttons")
-        self.funciones.doble_click("xpath", "//button[contains(@id,'doubleClickBtn')]", t)
-        resultado = self.funciones.existe("xpath", "//p[contains(@id,'doubleClickMessage')]", t)
+        self.funciones.click_derecho("id", "rightClickBtn", t)
+        resultado = self.funciones.existe("id", "rightClickMessage", t)
         self.assertEqual(resultado, "Existe", "El mensaje de doble clic no apareció")
-        print("Test1 completado")
+        print("Test completado")
 
     def tearDown(self):
         print("\n--- Finalizando prueba ---")

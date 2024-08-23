@@ -1,3 +1,4 @@
+from argparse import Action
 import os
 import sys
 from typing import Literal, Optional
@@ -41,7 +42,7 @@ class FuncionesGlobales:
             self.driver.execute_script("arguments[0].scrollIntoView(true);", element)
             return element
         except TimeoutException:
-            print(f"No se encontró el elemento {path}")
+            print(f"No se encontro el elemento {path}")
             raise
     
     def validar_texto(self, selector: Literal["xpath", "id"], path: str, texto: str, tiempo: float):
@@ -97,7 +98,13 @@ class FuncionesGlobales:
     def doble_click(self, selector: Literal["xpath", "id"], path: str, tiempo: float):
         element = self._find_element(selector, path)
         ActionChains(self.driver).double_click(element).perform()
-        print(f"Doble click en → {path}")
+        print(f"Doble click en -> {path}")
+        self.tiempo(tiempo)
+        
+    def click_derecho(self, selector: Literal["Xpath", "id"], path: str, tiempo: float):
+        element = self._find_element(selector, path)
+        ActionChains(self.driver).context_click(element).perform()
+        print(f"Click derecho en -> {path}")
         self.tiempo(tiempo)
     
     def salida(self):
