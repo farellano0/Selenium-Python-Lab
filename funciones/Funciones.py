@@ -251,6 +251,8 @@ class FuncionesGlobales:
         
     def salida(self):
         if self.driver:
+            self.driver.close()
+            
+    def quitar(self):
+        if self.driver:
             self.driver.quit()
-            
-            
