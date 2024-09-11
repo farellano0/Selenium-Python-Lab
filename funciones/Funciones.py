@@ -57,8 +57,12 @@ class FuncionesGlobales:
     
     def click_valida(self, selector: Literal["xpath", "id"], path: str, tiempo: float):
         element = self._find_element(selector, path)
-        element.click()
-        print(f"Click realizado en el elemento {path}")
+        try:
+            element.click()
+            print(f"Click realizado en el elemento {path}")
+        except Exception as e:
+            print(f"No se dio click: {str(e)}")
+            raise
         self.tiempo(tiempo)
     
     def select_type(self, selector: Literal["xpath", "id"], path: str, tipo: Literal["text", "index", "value"], dato: str | int, tiempo: float):
@@ -88,15 +92,15 @@ class FuncionesGlobales:
         for path in args:
             self.check("xpath", path, tiempo)
     
-    def existe(self, selector: Literal["xpath", "id"], path: str, tiempo: float) -> Literal["Existe", "No Existe"]:
+    def existe(self, selector: Literal["xpath", "id"], path: str, tiempo: float):
         try:
             self._find_element(selector, path)
             print(f"El elemento {path} -> existe")
             self.tiempo(tiempo)
-            return "Existe"
+            return True
         except TimeoutException:
             print(f"No se encontró el elemento {path}")
-            return "No Existe"
+            return False
     
     def doble_click(self, selector: Literal["xpath", "id"], path: str, tiempo: float):
         element = self._find_element(selector, path)
